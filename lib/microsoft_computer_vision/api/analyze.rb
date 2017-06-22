@@ -5,13 +5,15 @@ module MicrosoftComputerVision::Api
 
     ENDPOINT = '/analyze'
 
-    def initialize(visual_features, details)
+    def initialize(api_url, visual_features, details, language)
+      @api_url = api_url
       @visual_features = visual_features
       @details = details
+      @language = language
     end
 
     def uri
-      uri = URI("#{MicrosoftComputerVision::Client::API_BASE}#{ENDPOINT}")
+      uri = URI("#{@api_url}#{ENDPOINT}")
       uri.query = URI.encode_www_form(params)
 
       uri
@@ -21,6 +23,7 @@ module MicrosoftComputerVision::Api
       data = {}
       data[:visualFeatures] = @visual_features unless @visual_features.nil?
       data[:details] = @details unless @details.nil?
+      data[:language] = @language unless @language.nil?
 
       data
     end

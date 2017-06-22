@@ -14,8 +14,10 @@ RSpec.describe MicrosoftComputerVision::Client do
   end
 
   context 'analyze' do
+    let(:api_url) { "https://#{MicrosoftComputerVision::Client::REGION_HOST_MAP[:west_us]}/vision/v1.0" }
+
     it 'When image url' do
-      stub_request(:post, 'https://api.projectoxford.ai/vision/v1.0/analyze').
+      stub_request(:post, "#{api_url}/analyze").
           with(body: {url:image_url},
                headers: {'Content-Type': content_type_json, 'Ocp-Apim-Subscription-Key': subscription_key})
 
@@ -23,7 +25,7 @@ RSpec.describe MicrosoftComputerVision::Client do
     end
 
     it 'When image file path' do
-      stub_request(:post, 'https://api.projectoxford.ai/vision/v1.0/analyze').
+      stub_request(:post, "#{api_url}/analyze").
           with(body: image_file_data,
                headers: {'Content-Type': content_type_stream, 'Ocp-Apim-Subscription-Key': subscription_key})
 
@@ -33,11 +35,12 @@ RSpec.describe MicrosoftComputerVision::Client do
     it 'When options' do
       visual_features = 'visualFeatures'
       details = 'details'
-      stub_request(:post, "https://api.projectoxford.ai/vision/v1.0/analyze?visualFeatures=#{visual_features}&details=#{details}").
+      language = 'en'
+      stub_request(:post, "#{api_url}/analyze?visualFeatures=#{visual_features}&details=#{details}&language=#{language}").
           with(body: {url:image_url},
                headers: {'Content-Type': content_type_json, 'Ocp-Apim-Subscription-Key': subscription_key})
 
-      client.analyze(image_url, {visual_features: visual_features, details: details})
+      client.analyze(image_url, {visual_features: visual_features, details: details, language: language})
     end
   end
 

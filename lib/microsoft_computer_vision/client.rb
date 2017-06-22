@@ -1,14 +1,22 @@
 module MicrosoftComputerVision
   class Client
 
-    API_BASE = 'https://api.projectoxford.ai/vision/v1.0'
+    DEFAULT_REGION = :west_us
+    REGION_HOST_MAP = {
+        west_us: 'westus.api.cognitive.microsoft.com',
+        east_us: 'eastus2.api.cognitive.microsoft.com',
+        west_central_us: 'westcentralus.api.cognitive.microsoft.com',
+        west_europe: 'westeurope.api.cognitive.microsoft.com',
+        southeast_asia: 'southeastasia.api.cognitive.microsoft.com'
+    }
 
-    def initialize(subscription_key)
+    def initialize(subscription_key, region = DEFAULT_REGION)
       @subscription_key = subscription_key
+      @api_url = "https://#{REGION_HOST_MAP[region]}/vision/v1.0"
     end
 
-    def analyze(image_path, options)
-      analyze = Api::Analyze.new(options[:visual_features], options[:details])
+    def analyze(image_path, options = {})
+      analyze = Api::Analyze.new(@api_url, options[:visual_features], options[:details], options[:language])
       post_image_path(analyze.uri, image_path)
     end
 
