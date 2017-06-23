@@ -21,7 +21,7 @@ module MicrosoftComputerVision
     end
 
     def describe(image_path, options)
-      describe = Api::Describe.new(options[:max_candidates])
+      describe = Api::Describe.new(@api_url, options[:max_candidates])
       post_image_path(describe.uri, image_path)
     end
 

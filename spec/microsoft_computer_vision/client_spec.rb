@@ -8,13 +8,13 @@ RSpec.describe MicrosoftComputerVision::Client do
   let(:client) { MicrosoftComputerVision::Client.new(subscription_key) }
   let(:content_type_json) { 'application/json' }
   let(:content_type_stream) { 'application/octet-stream' }
+  let(:api_url) { "https://#{MicrosoftComputerVision::Client::REGION_HOST_MAP[:west_us]}/vision/v1.0" }
 
   before do
     allow(File).to receive(:open).and_yield(StringIO.new(image_file_data))
   end
 
   context 'analyze' do
-    let(:api_url) { "https://#{MicrosoftComputerVision::Client::REGION_HOST_MAP[:west_us]}/vision/v1.0" }
 
     it 'When image url' do
       stub_request(:post, "#{api_url}/analyze").
@@ -46,7 +46,7 @@ RSpec.describe MicrosoftComputerVision::Client do
 
   context 'describe' do
     it 'When image url' do
-      stub_request(:post, 'https://api.projectoxford.ai/vision/v1.0/describe').
+      stub_request(:post, "#{api_url}/describe").
           with(body: {url:image_url},
                headers: {'Content-Type': content_type_json, 'Ocp-Apim-Subscription-Key': subscription_key})
 
@@ -54,7 +54,7 @@ RSpec.describe MicrosoftComputerVision::Client do
     end
 
     it 'When image file path' do
-      stub_request(:post, 'https://api.projectoxford.ai/vision/v1.0/describe').
+      stub_request(:post, "#{api_url}/describe").
           with(body: image_file_data,
                headers: {'Content-Type': content_type_stream, 'Ocp-Apim-Subscription-Key': subscription_key})
 
@@ -63,7 +63,7 @@ RSpec.describe MicrosoftComputerVision::Client do
 
     it 'When options' do
       max_candidates = '1'
-      stub_request(:post, "https://api.projectoxford.ai/vision/v1.0/describe?maxCandidates=#{max_candidates}").
+      stub_request(:post, "#{api_url}/describe?maxCandidates=#{max_candidates}").
           with(body: {url:image_url},
                headers: {'Content-Type': content_type_json, 'Ocp-Apim-Subscription-Key': subscription_key})
 

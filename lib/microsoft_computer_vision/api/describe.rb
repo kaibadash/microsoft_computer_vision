@@ -5,12 +5,13 @@ module MicrosoftComputerVision::Api
 
     ENDPOINT = '/describe'
 
-    def initialize(max_candidates)
+    def initialize(api_url, max_candidates)
+      @api_url = api_url
       @max_candidates = max_candidates
     end
 
     def uri
-      uri = URI("#{MicrosoftComputerVision::Client::API_BASE}#{ENDPOINT}")
+      uri = URI("#{@api_url}#{ENDPOINT}")
       uri.query = URI.encode_www_form(params)
 
       uri
